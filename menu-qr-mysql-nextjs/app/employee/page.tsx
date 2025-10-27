@@ -40,7 +40,7 @@ export default function EmployeePage() {
           <div key={o.id} className="card">
             <div className="flex items-center justify-between">
               <div>
-                <div className="font-semibold">Pedido #{o.id[:8]}</div>
+                <div className="font-semibold">Pedido #{o.id.slice(0,8)}</div>
                 <div className="text-sm opacity-70">{o.type === 'dine_in' ? `Mesa ${o.tableNumber || '-'}` : 'Para llevar'}</div>
               </div>
               <button className="btn btn-outline" onClick={() => updateOrder(o.id, 'ready')}>Marcar listo</button>
