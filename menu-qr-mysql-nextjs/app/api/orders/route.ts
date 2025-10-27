@@ -10,13 +10,13 @@ export async function GET(req: Request) {
     include: { items: { include: { item: true } } },
   })
   return NextResponse.json({
-    orders: orders.map(o => ({
+    orders: orders.map((o: any) => ({
       id: o.id,
       type: o.type,
       status: o.status,
       tableNumber: o.tableNumber ?? undefined,
       createdAt: o.createdAt,
-      items: o.items.map(oi => ({
+      items: o.items.map((oi: any) => ({
         id: oi.id,
         name: oi.item.name,
         quantity: oi.quantity,
