@@ -1,5 +1,5 @@
-import { prisma } from '../../../../lib/prisma'
 import { NextResponse } from 'next/server'
+import { prisma } from '../../../../lib/prisma'
 
 export async function GET(_req: Request, { params }: { params: { slug: string } }) {
   const restaurant = await prisma.restaurant.findUnique({ where: { slug: params.slug } })
@@ -7,12 +7,12 @@ export async function GET(_req: Request, { params }: { params: { slug: string } 
 
   const categories = await prisma.category.findMany({
     where: { restaurantId: restaurant.id, isActive: true },
-    orderBy: { position: 'asc' }
+    orderBy: { position: 'asc' },
   })
 
   const items = await prisma.item.findMany({
     where: { restaurantId: restaurant.id, isActive: true },
-    orderBy: { position: 'asc' }
+    orderBy: { position: 'asc' },
   })
 
   const grouped = categories.map((c: any) => ({
@@ -27,8 +27,7 @@ export async function GET(_req: Request, { params }: { params: { slug: string } 
         image_url: i.imageUrl,
         description: i.description,
       })),
-  }));
-
+  }))
 
   return NextResponse.json({ restaurant: { name: restaurant.name, slug: restaurant.slug }, categories: grouped })
 }
