@@ -1,7 +1,7 @@
 import React from 'react'
 
 async function getMenu(slug: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/menu/${slug}`, { cache: 'no-store' })
+  const res = await fetch(`/api/menu/${slug}`, { cache: 'no-store' })
   if (!res.ok) throw new Error('No se pudo cargar el menú')
   return res.json()
 }
