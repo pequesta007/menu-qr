@@ -15,12 +15,20 @@ export async function GET(_req: Request, { params }: { params: { slug: string } 
     orderBy: { position: 'asc' }
   })
 
-  const grouped = categories.map(c => ({
-    id: c.id, name: c.name,
-    items: items.filter(i => i.categoryId === c.id).map(i => ({
-      id: i.id, name: i.name, price: i.price, image_url: i.imageUrl, description: i.description
-    }))
-  }))
+  const grouped = categories.map((c: any) => ({
+    id: c.id,
+    name: c.name,
+    items: items
+      .filter((i: any) => i.categoryId === c.id)
+      .map((i: any) => ({
+        id: i.id,
+        name: i.name,
+        price: i.price,
+        image_url: i.imageUrl,
+        description: i.description,
+      })),
+  }));
+
 
   return NextResponse.json({ restaurant: { name: restaurant.name, slug: restaurant.slug }, categories: grouped })
 }
