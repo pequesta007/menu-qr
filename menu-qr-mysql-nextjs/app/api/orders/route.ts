@@ -1,5 +1,5 @@
-import { prisma } from '../../../lib/prisma'
 import { NextResponse } from 'next/server'
+import { prisma } from '../../../lib/prisma'
 
 export async function GET(req: Request) {
   const url = new URL(req.url)
@@ -7,7 +7,7 @@ export async function GET(req: Request) {
   const orders = await prisma.order.findMany({
     where: status ? { status } : undefined,
     orderBy: { createdAt: 'desc' },
-    include: { items: { include: { item: true } } }
+    include: { items: { include: { item: true } } },
   })
   return NextResponse.json({
     orders: orders.map(o => ({
@@ -22,9 +22,9 @@ export async function GET(req: Request) {
         quantity: oi.quantity,
         note: oi.note ?? undefined,
         serveFor: oi.serveFor,
-        status: oi.status
-      }))
-    }))
+        status: oi.status,
+      })),
+    })),
   })
 }
 
@@ -34,10 +34,9 @@ export async function POST(req: Request) {
   const rest = await prisma.restaurant.findUnique({ where: { slug: restaurantSlug } })
   if (!rest) return NextResponse.json({ error: 'Restaurante no existe' }, { status: 404 })
 
-  // Fetch item prices
   const itemIds = items.map((i: any) => i.itemId)
   const dbItems = await prisma.item.findMany({ where: { id: { in: itemIds }, restaurantId: rest.id } })
-  const byId: any = {}; dbItems.forEach(i => byId[i.id] = i)
+  const byId: any = {}; dbItems.forEach(i => (byId[i.id] = i))
 
   let total = 0
   const orderItemsData = items.map((i: any) => {
@@ -58,9 +57,9 @@ export async function POST(req: Request) {
       type: type === 'takeaway' ? 'takeaway' : 'dine_in',
       tableNumber: tableNumber || null,
       total,
-      items: { create: orderItemsData }
+      items: { create: orderItemsData },
     },
-    include: { items: true }
+    include: { items: true },
   })
 
   return NextResponse.json({ orderId: order.id, total })
